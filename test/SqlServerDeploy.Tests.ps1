@@ -1,3 +1,5 @@
+#Requires -Modules Pester
+
 $ModuleManifestName = 'SqlServerDeploy.psd1'
 $ModuleManifestPath = "$PSScriptRoot\..\$ModuleManifestName"
 
