@@ -3,7 +3,7 @@ version: '1.0.{build}'
 install:
   - ps: Install-Module Invoke-Build
 
-  platform:
+platform:
   - x86
   - x64
 
