@@ -1,7 +1,7 @@
 version: '1.0.{build}'
 
 install:
-  - ps: Install-Module Invoke-Build
+  - ps: Install-Module InvokeBuild
 
 platform:
   - x86
