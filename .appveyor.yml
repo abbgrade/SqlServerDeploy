@@ -1,0 +1,14 @@
+version: '1.0.{build}'
+
+install:
+  - ps: Install-Module Invoke-Build
+
+  platform:
+  - x86
+  - x64
+
+build_script:
+  - ps: Invoke-Build Build
+
+test_script:
+  - ps: Invoke-Build Test
