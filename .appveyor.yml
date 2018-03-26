@@ -12,4 +12,4 @@ build_script:
   - ps: Invoke-Build Build
 
 test_script:
-  - ps: $ProjectRoot = $ENV:APPVEYOR_BUILD_FOLDER; $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"; $PSVersion = $PSVersionTable.PSVersion.Major; $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"; Invoke-Pester @Verbose -Path "$ProjectRoot\Tests" -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile" -PassThru | Export-Clixml -Path "$ProjectRoot\PesterResults_PS$PSVersion`_$Timestamp.xml"
+  - ps: $ProjectRoot = $ENV:APPVEYOR_BUILD_FOLDER; $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"; $PSVersion = $PSVersionTable.PSVersion.Major; $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"; Invoke-Pester @Verbose -Path "$ProjectRoot\Test" -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile" -PassThru | Export-Clixml -Path "$ProjectRoot\PesterResults_PS$PSVersion`_$Timestamp.xml"
