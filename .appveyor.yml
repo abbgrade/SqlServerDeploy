@@ -12,4 +12,4 @@ build_script:
   - ps: Invoke-Build Build
 
 test_script:
-  - ps: Invoke-Pester @Verbose -Path .\Test
+  - ps: .\Test\appveyor.Pester.ps1
