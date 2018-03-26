@@ -2,6 +2,7 @@ version: '1.0.{build}'
 
 install:
   - ps: Install-Module InvokeBuild
+  - ps: Install-Module Pester
 
 platform:
   - x86
