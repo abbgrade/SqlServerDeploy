@@ -27,6 +27,6 @@ function Install-Dacpac
         /TargetUser:$( $Credential.GetNetworkCredential().username ) `
         /TargetPassword:$( $Credential.GetNetworkCredential().password ) `
         /TargetServerName:$ServerInstance `
-        /TargetDatabaseName:$DatabaseName
+        /TargetDatabaseName:$DatabaseName | Write-Debug
 
 }

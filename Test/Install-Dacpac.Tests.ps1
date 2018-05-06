@@ -55,12 +55,12 @@ function New-SqlServer {
         # $DockerImage = 'microsoft/mssql-server-windows-developer:2017-latest'
     )
 
-    docker pull $DockerImage | Write-Verbose
+    docker pull $DockerImage | Write-Debug
     docker run -e "ACCEPT_EULA=Y" `
         -e "MSSQL_SA_PASSWORD=$SAPassword" `
         -p 1433:1433 `
         --name $DockerContainerName `
-        -d $DockerImage | Write-Verbose
+        -d $DockerImage | Write-Debug
 
     [string] $serverInstance = 'localhost'
     $serverInstance
@@ -74,8 +74,8 @@ function Remove-SqlServer {
         $DockerContainerName
     )
 
-    docker stop $DockerContainerName
-    docker rm $DockerContainerName
+    docker stop $DockerContainerName | Write-Debug
+    docker rm $DockerContainerName | Write-Debug
 }
 
 #endregion
@@ -92,7 +92,6 @@ Describe 'Install-Dacpac Tests' {
         $dacpacPath = New-Dacpac -ProjectPath "$ScriptRoot\sql-server-samples\samples\databases\wide-world-importers\wwi-ssdt\wwi-ssdt\WideWorldImporters.sqlproj"
     }
     It 'Checks the SQL Server' {
-        Import-Module SqlServer -Force
         Get-SqlInstance -MachineName $serverInstance -Credential $saCredential
     }
     It 'Installs a Dacpac' {
