@@ -4,6 +4,8 @@ install:
   - ps: Install-Module InvokeBuild
   - ps: Install-Module Pester
   - ps: Install-Module SqlServer -AllowClobber
+  - choco install -y docker
+  - choco install -y docker-machine
 
 platform:
   - x86
