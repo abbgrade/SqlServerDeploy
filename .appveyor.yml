@@ -4,7 +4,7 @@ image: Visual Studio 2017
 
 install:
   - ps: Install-Module InvokeBuild -Force
-  - ps: Install-Module Pester -Force
+  - ps: Install-Module Pester -Force -SkipPublisherCheck
   - ps: Install-Module SqlServer -AllowClobber -Force
   - docker version
 
