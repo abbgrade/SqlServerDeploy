@@ -3,14 +3,11 @@ version: '1.0.{build}'
 install:
   - ps: Install-Module InvokeBuild
   - ps: Install-Module Pester
+  - ps: Install-Module SqlServer -AllowClobber
 
 platform:
   - x86
   - x64
-
-before_build:
-  - ps: Install-Module Pester
-  - ps: Install-Module SqlServer
 
 build_script:
   - ps: Invoke-Build Build
