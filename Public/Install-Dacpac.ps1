@@ -28,5 +28,6 @@ function Install-Dacpac
         /TargetPassword:$( $Credential.GetNetworkCredential().password ) `
         /TargetServerName:$ServerInstance `
         /TargetDatabaseName:$DatabaseName | Write-Debug
+    Write-Debug "Dacpac $DackpackPath deloyed."
 
 }

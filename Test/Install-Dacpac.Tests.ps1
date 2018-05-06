@@ -56,11 +56,13 @@ function New-SqlServer {
     )
 
     docker pull $DockerImage | Write-Debug
+    Write-Debug "Docker image $DockerImage pulled."
     docker run -e "ACCEPT_EULA=Y" `
         -e "MSSQL_SA_PASSWORD=$SAPassword" `
         -p 1433:1433 `
         --name $DockerContainerName `
         -d $DockerImage | Write-Debug
+    Write-Debug "Docker container $DockerContainerName created."
 
     [string] $serverInstance = 'localhost'
     $serverInstance
