@@ -31,7 +31,7 @@
             "label": "Run tests",
             "type": "shell",
             "group": "test",
-            "command": "Invoke-Pester -Script test -PesterOption @{IncludeVSCodeMarker=$true}",
+            "command": "Invoke-Pester -Script ./Test -PesterOption @{ IncludeVSCodeMarker = $true }",
             "problemMatcher": [
                 "$pester"
             ]
