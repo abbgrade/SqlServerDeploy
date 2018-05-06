@@ -1,3 +1,3 @@
-[submodule "Test/Dependencies/WWI"]
-path = Test/Dependencies/WWI/
-url = git://github.com/Microsoft/sql-server-samples.git
+[submodule "Test/sql-server-samples"]
+	path = Test/sql-server-samples
+	url = git://github.com/Microsoft/sql-server-samples.git
