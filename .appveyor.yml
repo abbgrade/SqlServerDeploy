@@ -3,11 +3,9 @@ version: '1.0.{build}'
 image: Visual Studio 2017
 
 install:
-  - ps: Install-Module InvokeBuild
-  - ps: Install-Module Pester
-  - ps: Install-Module SqlServer -AllowClobber
-  - choco install -y docker
-  - choco install -y docker-machine
+  - ps: Install-Module InvokeBuild -Force
+  - ps: Install-Module Pester -Force
+  - ps: Install-Module SqlServer -AllowClobber -Force
   - docker version
 
 platform:
