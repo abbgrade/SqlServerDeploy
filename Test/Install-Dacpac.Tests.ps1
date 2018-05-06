@@ -51,10 +51,18 @@ function New-SqlServer {
 
         [ValidateNotNullOrEmpty()]
         [string]
-        $DockerImage = 'microsoft/mssql-server-linux:2017-latest'
-        # $DockerImage = 'microsoft/mssql-server-windows-developer:2017-latest'
+        # $DockerImage = 'microsoft/mssql-server-linux:2017-latest'
+        $DockerImage = 'microsoft/mssql-server-windows-developer:2017-latest'
     )
 
+    [string] $saParameter = $null
+    if ( $DockerImage -match 'linux' ) {
+        $saParameter = 'MSSQL_SA_PASSWORD'
+    } elseif ( $DockerImage -match 'windows' ) {
+        $saParameter = 'sa_password'
+    } else {
+        throw "not implemented"
+    }
     docker pull $DockerImage | Write-Debug
     Write-Debug "Docker image $DockerImage pulled."
     docker run -e "ACCEPT_EULA=Y" `
@@ -64,8 +72,7 @@ function New-SqlServer {
         -d $DockerImage | Write-Debug
     Write-Debug "Docker container $DockerContainerName created."
 
-    [string] $serverInstance = 'localhost'
-    $serverInstance
+    'localhost'
 }
 
 function Remove-SqlServer {
@@ -95,12 +102,12 @@ Describe 'Install-Dacpac Tests' {
         $saCredential = New-Object System.Management.Automation.PSCredential ($saUsername, ( ConvertTo-SecureString $saPassword -AsPlainText -Force ))
         $dacpacPath = New-Dacpac -ProjectPath "$ScriptRoot\sql-server-samples\samples\databases\wide-world-importers\wwi-ssdt\wwi-ssdt\WideWorldImporters.sqlproj"
     }
-    It 'Checks the SQL Server' {
-        Get-SqlInstance -MachineName $serverInstance -Credential $saCredential
-    }
+    # It 'Checks the SQL Server' {
+    #     Get-SqlInstance -MachineName $serverInstance -Credential $saCredential
+    # }
     It 'Installs a Dacpac' {
         $databaseName = ( Get-Item $dacpacPath ).BaseName
-        Install-DacpacSave -DacpacPath $dacpacPath -ServerInstance $serverInstance -DatabaseName $databaseName -Credential $saCredential
+        Install-Dacpac -DacpacPath $dacpacPath -ServerInstance $serverInstance -DatabaseName $databaseName -Credential $saCredential
     }
     AfterAll {
         Remove-SqlServer -DockerContainerName $dockerContainerName
