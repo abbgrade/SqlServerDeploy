@@ -76,8 +76,10 @@ function Remove-SqlServer {
         $DockerContainerName
     )
 
-    docker stop $DockerContainerName | Write-Debug
-    docker rm $DockerContainerName | Write-Debug
+    if ( docker ps -f name=$DockerContainerName -q ) {
+        docker stop $DockerContainerName | Write-Debug
+        docker rm $DockerContainerName | Write-Debug
+    }
 }
 
 #endregion
