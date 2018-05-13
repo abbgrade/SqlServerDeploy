@@ -28,10 +28,10 @@
     },
     "tasks": [
         {
-            "label": "Run tests",
+            "label": "Test",
             "type": "shell",
             "group": "test",
-            "command": "Invoke-Pester -Script ./Test -PesterOption @{ IncludeVSCodeMarker = $true }",
+            "command": "Invoke-Pester -Script Test -PesterOption @{ IncludeVSCodeMarker = $true }",
             "problemMatcher": [
                 "$pester"
             ]
