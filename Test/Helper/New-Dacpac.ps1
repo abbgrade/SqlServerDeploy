@@ -20,7 +20,7 @@ function New-Dacpac {
     )
 
     $projectFile = Get-Item $projectPath
-    $projectName = $( $projectFile.BaseName )
+    $projectName = $projectFile.BaseName
     $projectFolderPath = $projectFile.Directory
     $dacpacPath = "$projectFolderPath\bin\$Configuration\$projectName.dacpac"
 

@@ -3,18 +3,24 @@ function New-SqlServer {
     param (
         [ValidateNotNullOrEmpty()]
         [string]
-        $DockerContainerName,
-
-        [ValidateNotNullOrEmpty()]
-        [string]
         $ServerAdminPassword,
 
         [ValidateNotNullOrEmpty()]
         [string]
-        # $DockerImage = 'microsoft/mssql-server-linux:2017-latest'
-        $DockerImage = 'microsoft/mssql-server-windows-developer:2017-latest'
+        # $DockerImage = 'microsoft/mssql-server-linux:latest'
+        $DockerImage = 'microsoft/mssql-server-windows-developer:latest',
+
+        [string]
+        $DockerContainerName,
+
+        [switch]
+        $AcceptEula
     )
 
+    # prepare parameter
+    if ( -not $AcceptEula ) {
+        throw "Accept the Microsoft EULA with -AcceptEula"
+    }
     $environment = @{
         'ACCEPT_EULA' = "Y"
     }
@@ -27,14 +33,27 @@ function New-SqlServer {
         throw "not implemented"
     }
 
+    # check image
     Install-DockerImage -Image $DockerImage
-    New-DockerContainer `
+
+    # create container
+    $container = New-DockerContainer `
         -Image $DockerImage `
         -Name $DockerContainerName `
         -Environment $environment `
         -Ports @{
             1433 = 1433
         } -Detach
+    $container | Add-Member -NotePropertyName 'Hostname' -NotePropertyValue 'localhost'
 
-    'localhost'
+    # check service status
+    Add-Type -AssemblyName 'System.ServiceProcess'
+    $service = Get-DockerService -ContainerName $container.Name -Name 'MSSQLSERVER'
+    Write-Debug "Service '$( $service.Name )' is $( $service.Status )"
+    if ( $service.Status -ne [System.ServiceProcess.ServiceControllerStatus]::Running ) {
+        throw "Service '$( $service.Name )' is not 'Running'."
+    }
+
+    # return
+    $container
 }

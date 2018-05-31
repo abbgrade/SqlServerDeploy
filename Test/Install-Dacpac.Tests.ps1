@@ -1,4 +1,4 @@
-#Requires -Modules Pester, @{ ModuleName="PSDocker"; ModuleVersion="1.0.12" }
+#Requires -Modules Pester, @{ ModuleName="PSDocker"; ModuleVersion="1.0.22" }
 
 param (
     [string] $ServerAdminUsername = "sa",
@@ -14,17 +14,8 @@ if ( $PSScriptRoot ) { $ScriptRoot = $PSScriptRoot } else { $ScriptRoot = Get-Lo
 $ModuleManifestPath = "$ScriptRoot\..\SqlServerDeploy.psm1"
 Import-Module $ModuleManifestPath -Force
 
-New-Alias Install-Dacpac Install-DacpacSMO -Force
-
-foreach( $assemblyName in @(
-    'Microsoft.SqlServer.Smo',
-    'Microsoft.SqlServer.ConnectionInfo'
-)) {
-    $assembly = [Reflection.Assembly]::LoadWithPartialName($assemblyName)
-    if ( -not $assembly ) {
-        Write-Error "Failed to load assembly [$assemblyName]"
-    }
-}
+# New-Alias Install-Dacpac Install-DacpacSMO -Force
+New-Alias Install-Dacpac Install-DacpacSqlPackage -Force
 
 #region Helper Functions
 
@@ -38,10 +29,13 @@ Describe 'Install-Dacpac Tests' {
 
     BeforeAll {
         try {
-            $serverInstance = New-SqlServer -DockerContainerName $dockerContainerName -ServerAdminPassword $ServerAdminPassword
+            # $dacpacPath = New-Dacpac -ProjectPath "$ScriptRoot\sql-server-samples\samples\databases\wide-world-importers\wwi-ssdt\wwi-ssdt\WideWorldImporters.sqlproj"
+            $dacpacPath = New-Dacpac -ProjectPath "$ScriptRoot\HelloWorldDB\HelloWorldDB.sqlproj"
+            $dockerContainer = New-SqlServer -DockerContainerName $dockerContainerName -ServerAdminPassword $ServerAdminPassword -AcceptEula
+            $serverInstance = $dockerContainer.Hostname
             $saCredential = New-Object System.Management.Automation.PSCredential( $ServerAdminUsername, ( ConvertTo-SecureString $ServerAdminPassword -AsPlainText -Force ))
-            $dacpacPath = New-Dacpac -ProjectPath "$ScriptRoot\sql-server-samples\samples\databases\wide-world-importers\wwi-ssdt\wwi-ssdt\WideWorldImporters.sqlproj"
         } catch {
+            Remove-SqlServer -DockerContainerName $dockerContainerName
             Write-Error $_.Exception
         }
     }
@@ -50,10 +44,12 @@ Describe 'Install-Dacpac Tests' {
     }
     It 'Installs a Dacpac' {
         $databaseName = ( Get-Item $dacpacPath ).BaseName
-        Install-Dacpac -DacpacPath $dacpacPath -ServerInstance $serverInstance -DatabaseName $databaseName -Credential $saCredential -DatabaseCredential
+        Install-Dacpac -DacpacPath $dacpacPath `
+            -ServerInstance $serverInstance `
+            -DatabaseName $databaseName `
+            -Credential $saCredential -DatabaseCredential
     }
     AfterAll {
         Remove-SqlServer -DockerContainerName $dockerContainerName
     }
 }
-
