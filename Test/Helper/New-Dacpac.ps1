@@ -30,7 +30,7 @@ function New-Dacpac {
         Write-Debug "$dacpacPath created."
     }
 
-    Test-Path $dacpacPath | Should Be $true
+    Test-Path $dacpacPath | Should -Be $true
 
     $dacpacPath
 }
