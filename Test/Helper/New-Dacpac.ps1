@@ -7,7 +7,7 @@ function New-Dacpac {
 
         [ValidateScript({Test-Path $_ })]
         [string]
-        $MSBuild = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe",
+        $MSBuild = "MSBuild.exe", # C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\
 
         [ValidateNotNullOrEmpty()]
         [string]
