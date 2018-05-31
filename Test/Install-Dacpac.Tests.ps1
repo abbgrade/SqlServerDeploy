@@ -31,12 +31,12 @@ Describe 'Install-Dacpac Tests' {
         try {
             # $dacpacPath = New-Dacpac -ProjectPath "$ScriptRoot\sql-server-samples\samples\databases\wide-world-importers\wwi-ssdt\wwi-ssdt\WideWorldImporters.sqlproj"
             $dacpacPath = New-Dacpac -ProjectPath "$ScriptRoot\HelloWorldDB\HelloWorldDB.sqlproj"
+            $saCredential = New-Object System.Management.Automation.PSCredential( $ServerAdminUsername, ( ConvertTo-SecureString $ServerAdminPassword -AsPlainText -Force ))
             $dockerContainer = New-SqlServer -DockerContainerName $dockerContainerName -ServerAdminPassword $ServerAdminPassword -AcceptEula
             $serverInstance = $dockerContainer.Hostname
-            $saCredential = New-Object System.Management.Automation.PSCredential( $ServerAdminUsername, ( ConvertTo-SecureString $ServerAdminPassword -AsPlainText -Force ))
         } catch {
             Remove-SqlServer -DockerContainerName $dockerContainerName
-            Write-Error $_.Exception
+            throw
         }
     }
     It 'Checks the SQL Server' {
