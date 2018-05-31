@@ -6,7 +6,7 @@ install:
   - ps: Install-Module InvokeBuild -Force
   - ps: Install-Module Pester -Force -SkipPublisherCheck
   - ps: Install-Module SqlServer -AllowClobber -Force
-  - ps: Install-Module PSDocker
+  - ps: Install-Module PSDocker -Force
   - docker version
 
 platform:
