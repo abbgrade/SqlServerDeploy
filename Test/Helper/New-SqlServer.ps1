@@ -48,8 +48,11 @@ function New-SqlServer {
 
     # check service status
     Add-Type -AssemblyName 'System.ServiceProcess'
-    $service = Get-DockerService -ContainerName $container.Name -Name 'MSSQLSERVER'
-    Write-Debug "Service '$( $service.Name )' is $( $service.Status )"
+    do {
+        $service = Get-DockerService -ContainerName $container.Name -Name 'MSSQLSERVER'
+        Write-Debug "Service '$( $service.Name )' is $( $service.Status )"
+    } while ( $service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::StartPending )
+
     if ( $service.Status -ne [System.ServiceProcess.ServiceControllerStatus]::Running ) {
         throw "Service '$( $service.Name )' is not 'Running'."
     }
