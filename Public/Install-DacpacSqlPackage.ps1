@@ -18,7 +18,7 @@ function Install-DacpacSqlPackage
 
         [ValidateScript({Test-Path $_ })]
         [string]
-        $SqlPackagePath = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\130\sqlpackage.exe"
+        $SqlPackagePath = "sqlpackage.exe" # C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\130\
     )
 
     $process = New-Object System.Diagnostics.Process
