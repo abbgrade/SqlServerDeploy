@@ -44,10 +44,12 @@ Describe 'Install-Dacpac Tests' {
     }
     It 'Installs a Dacpac' {
         $databaseName = ( Get-Item $dacpacPath ).BaseName
-        Install-Dacpac -DacpacPath $dacpacPath `
-            -ServerInstance $serverInstance `
-            -DatabaseName $databaseName `
-            -Credential $saCredential -DatabaseCredential
+        {
+            Install-Dacpac -DacpacPath $dacpacPath `
+                -ServerInstance $serverInstance `
+                -DatabaseName $databaseName `
+                -Credential $saCredential -DatabaseCredential
+        } | Should -Not -Throw
     }
     AfterAll {
         Remove-SqlServer -DockerContainerName $dockerContainerName
